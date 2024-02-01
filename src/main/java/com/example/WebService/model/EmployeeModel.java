@@ -13,5 +13,5 @@ public class EmployeeModel {
 
     private String firstName;
     private String lastName;
-    private long age;
+    private Long age;
 }

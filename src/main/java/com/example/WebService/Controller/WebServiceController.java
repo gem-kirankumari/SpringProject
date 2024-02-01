@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,6 +56,33 @@ public class WebServiceController {
         if (deleted) {
             return new ResponseEntity<>("Operation Successful", HttpStatus.OK);
         }
+        return new ResponseEntity<>("Operation Unsuccessful", HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/employee/age")
+    private ResponseEntity<?> findByAge(@RequestParam(required = false) Long age, @RequestParam(required = false, defaultValue = "10") Long lowerAge, @RequestParam(required = false) Long upperAge) {
+        List<EmployeeModel> employee = null;
+        if((age != null && upperAge != null) || (age == null && upperAge == null)) {
+            return new ResponseEntity<>("Operation Unsuccessful", HttpStatus.BAD_REQUEST);
+        }
+        if (age != null) {
+            employee = employeeServices.findByAge(age);
+        } else if (upperAge != null) {
+            employee = employeeServices.findEmployeeByAgeRange(lowerAge, upperAge);
+        }
+        if (employee != null && employee.size() != 0) {
+            return new ResponseEntity<>(employee, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Operation Unsuccessful", HttpStatus.NOT_FOUND);
+    }
+
+
+
+    @GetMapping(value = "/employee/{firstName}")
+    private ResponseEntity<?> findEmployeeByFirstName(@PathVariable String firstName) {
+        EmployeeModel employee = employeeServices.findEmployeeByFirstName(firstName);
+        if (employee != null)
+        { return new ResponseEntity<>(employee, HttpStatus.OK); }
         return new ResponseEntity<>("Operation Unsuccessful", HttpStatus.NOT_FOUND);
     }
 }

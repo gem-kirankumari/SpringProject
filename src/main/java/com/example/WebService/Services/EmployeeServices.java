@@ -7,9 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 
 //Services will have business logic
@@ -57,5 +55,17 @@ public class EmployeeServices {
             return false;
         }
         return false;
+    }
+
+    public List<EmployeeModel> findByAge(long age) {
+        return employeeRepository.findByAgeOrderByAgeAsc(age);
+    }
+
+    public List<EmployeeModel> findEmployeeByAgeRange(long lowerAge, long upperAge) {
+        return employeeRepository.findByAgeBetweenOrderByAgeAsc(lowerAge, upperAge);
+    }
+
+    public EmployeeModel findEmployeeByFirstName(String firstName) {
+        return employeeRepository.findByFirstName(firstName);
     }
 }
