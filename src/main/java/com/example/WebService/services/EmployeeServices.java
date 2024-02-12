@@ -1,4 +1,4 @@
-package com.example.WebService.Services;
+package com.example.WebService.services;
 
 
 import com.example.WebService.model.EmployeeModel;
@@ -20,8 +20,7 @@ public class EmployeeServices {
 
     public boolean createEmployee(EmployeeModel employeeModel) {
         EmployeeModel saved = employeeRepository.save(employeeModel);
-        if (saved == null) {return false;}
-        return true;
+        return (saved == null) ? false : true;
     }
 
     public List<EmployeeModel> employeeDetails() {
@@ -30,31 +29,16 @@ public class EmployeeServices {
     }
 
     public EmployeeModel updateEmployee(EmployeeModel searchEmployee) {
-        log.info("Here");
-        log.info(searchEmployee.toString());
-        log.info("Here2");
         EmployeeModel searchedEmployee = employeeRepository.findByFirstName(searchEmployee.getFirstName());
-
-        if (searchedEmployee != null) {
-            log.info("not null");
-            EmployeeModel done = employeeRepository.deleteByFirstName(searchedEmployee.getFirstName());
-            log.info("Done " + done);
-            employeeRepository.save(searchEmployee);
-            return searchedEmployee;
-        }
-        return null;
+        EmployeeModel employeeDataUpdated = (searchedEmployee != null) ? employeeRepository.deleteByFirstName(searchedEmployee.getFirstName()) : null;
+        employeeRepository.save(searchEmployee);
+        return searchEmployee;
     }
 
     public boolean deleteEmployee(EmployeeModel searchEmployee) {
         EmployeeModel searchedEmployee = employeeRepository.findByFirstName(searchEmployee.getFirstName());
-        if (searchedEmployee != null) {
-            EmployeeModel done = employeeRepository.deleteByFirstName(searchedEmployee.getFirstName());
-            if (done != null) {
-                return true;
-            }
-            return false;
-        }
-        return false;
+        EmployeeModel done = (searchedEmployee != null) ? employeeRepository.deleteByFirstName(searchedEmployee.getFirstName()) : null;
+        return (done != null) ? true : false;
     }
 
     public List<EmployeeModel> findByAge(long age) {

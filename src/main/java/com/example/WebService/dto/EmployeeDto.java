@@ -1,8 +1,10 @@
 package com.example.WebService.dto;
 
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 
 @Getter
@@ -12,7 +14,13 @@ import org.springframework.data.annotation.Id;
 @ToString
 public class EmployeeDto {
 
+    @NotNull
+    @NotBlank
     private String firstName;
+
+    @NotBlank
     private String lastName;
-    private Long age;
+
+    @Min(value = 15)
+    private Long age = Long.MIN_VALUE;
 }
